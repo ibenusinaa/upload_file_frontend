@@ -52,14 +52,19 @@ export default class LandingPage extends React.Component{
                         <AddDataModal />
                     </div>
                     <hr className='col-12'/>
+
+                    {/* layout Card */}
                     <div className ='row'>
                         {
                             this.state.data.map((value, index) => {
                                 return(
                                     <div className='col-3'>
+                                        {/* Cardnya */}
                                         <div className="card" style={{width: '18rem'}}>
+                                            {/* Image Card Utama */}
                                             <img className="card-img-top" src={this.state.imageSelected[index].image} alt={this.state.imageSelected[index].image} sytle={{width: 300, height:240}}/>
                                             <div className='row mt-2'>
+                                                {/* Image card yang kecil kecil */}
                                                 {
                                                     value.images.map((val, ind) => {
                                                         return(
@@ -77,6 +82,7 @@ export default class LandingPage extends React.Component{
                                                 }
                                                 
                                             </div>
+                                            {/* Detail Produk */}
                                             <div className="card-body">
                                                 <div className='d-flex justify-content-between'>
                                                     <h5 className="card-title">{value.brand}</h5>
