@@ -1,11 +1,11 @@
 import axios from 'axios'
 import React from 'react'
-
+import { AddDataModal } from './../Components/AddDataModal'
 export default class LandingPage extends React.Component{
 
     state = {
         data: null,
-        image: null
+        imageSelected: null
     }
 
     componentDidMount(){
@@ -16,8 +16,14 @@ export default class LandingPage extends React.Component{
         axios.get('http://localhost:5000/products')
         .then((res) => {
             console.log(res)
-            this.setState({data: res.data})
-            this.setState({image: res.data.data[0].images[0].image})
+
+            let imageSelected = []
+            res.data.data.forEach((value, index) => {
+                imageSelected.push(value.images[0])
+            })
+            this.setState({data: res.data.data, imageSelected: imageSelected})
+            console.log(imageSelected)
+            
         })
         .catch((err) => {
             console.log(err)
@@ -39,32 +45,37 @@ export default class LandingPage extends React.Component{
                 <div className="row">
                     <div className='mt-3 col-12'>
                         <h3>
-                            HEADER
+                            ADMIN
                         </h3>
                     </div>
                     <div className='my-2 mx-4'>
-                        <button className='btn btn-success'>
-                            Add Card
-                        </button>
+                        <AddDataModal />
                     </div>
                     <hr className='col-12'/>
                     <div className ='row'>
                         {
-                            this.state.data.data.map((value, index) => {
+                            this.state.data.map((value, index) => {
                                 return(
                                     <div className='col-3'>
                                         <div className="card" style={{width: '18rem'}}>
-                                            <img className="card-img-top" src={this.state.image} alt="Card image cap" />
-                                            <div className='row'>
-                                                <div className ='col-4'>
-                                                    <img className="card-img-top" src={value.images[0].image} alt="Card image cap" onClick={() => this.setState({image: value.images[0].image})}/>
-                                                </div>
-                                                <div className ='col-4'>
-                                                    <img className="card-img-top" src={value.images[1].image} alt="Card image cap" onClick={() => this.setState({image: value.images[1].image})}/>
-                                                </div>
-                                                <div className ='col-4'>
-                                                    <img className="card-img-top" src={value.images[2].image} alt="Card image cap" onClick={() => this.setState({image: value.images[2].image})}/>
-                                                </div>
+                                            <img className="card-img-top" src={this.state.imageSelected[index].image} alt={this.state.imageSelected[index].image} sytle={{width: 300, height:240}}/>
+                                            <div className='row mt-2'>
+                                                {
+                                                    value.images.map((val, ind) => {
+                                                        return(
+                                                            <div className ='col-4'>
+                                                                <img className="card-img" src={val.image} alt={val.image} 
+                                                                     onClick={() => {
+                                                                         let imageSelected = this.state.imageSelected
+                                                                         imageSelected[index] = val
+                                                                         this.setState({imageSelected: imageSelected})
+                                                                     }}
+                                                                     />
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                                
                                             </div>
                                             <div className="card-body">
                                                 <div className='d-flex justify-content-between'>
